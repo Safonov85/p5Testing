@@ -1,8 +1,8 @@
 function Vehicle(x,y)
 {
-  this.pos = createVector(random(width), random(height));
+  this.pos = createVector(x, y);
   this.target = createVector(x, y);
-  this.vel = p5.Vector.random2D();
+  this.vel = createVector(0, 0);
   this.acc = createVector();
   this.maxspeed = 10;
   this.maxforce = 2.2;
@@ -10,15 +10,12 @@ function Vehicle(x,y)
 
 Vehicle.prototype.behaviors = function()
 {
-  var arrive = this.arrive(this.target);
-  var mouse = createVector(mouseX + random(1, 7), mouseY + random(1, 7));
-  var flee = this.flee(mouse);
+  var mouse = createVector(mouseX, mouseY);
+  var drop = this.drop(mouse);
+  var stop = this.stop(this.target);
   
-  arrive.mult(2);
-  flee.mult(2);
-  
-  this.applyForce(arrive);
-  this.applyForce(flee);
+  this.applyForce(stop);
+  this.applyForce(drop);
 }
 
 Vehicle.prototype.applyForce = function(f)
@@ -35,47 +32,32 @@ Vehicle.prototype.update = function()
 
 Vehicle.prototype.show = function(ranSize, r, g, b)
 {
-    //stroke(random(0,255), random(0,255), random(0,255));
-    //strokeWeight(random(2, 8));
     stroke(r, g, b);
     strokeWeight(ranSize);
     point(this.pos.x, this.pos.y);
 }
 
-Vehicle.prototype.arrive = function(target)
-{
-  var desired = p5.Vector.sub(target, this.pos);
-  var d = desired.mag();
-  var speed = this.maxspeed;
-  if(d < 100)
-  {
-    speed = map(d, 0, 100, 0, this.maxspeed);
-  }
-  desired.setMag(speed);
-  var steer = p5.Vector.sub(desired, this.vel);
-  steer.limit(this.maxforce);
-  return steer;
-}
-
-Vehicle.prototype.flee = function(target)
+Vehicle.prototype.drop = function(target)
 {
   var desired = p5.Vector.sub(target, this.pos);
   var d = desired.mag();
   if(d < 30)
   {
-  desired.setMag(this.maxspeed);
-  desired.mult(-1);
-  var steer = p5.Vector.sub(desired, this.vel);
-  steer.limit(this.maxforce);
-  steer.x += random(-2, 2);
-  steer.y += random(-2, 2);
-  //console.clear();
-  //console.log(steer);
-  return steer;
+    return createVector(0, 3);
   }
-  else
-  {
-    return createVector(0, 0);
-    //console.log("else trigger");
-  }
+}
+
+Vehicle.prototype.stop = function(target)
+{
+  //var desired = p5.Vector.sub(target, this.pos);
+  //var d = desired.mag();
+  //var speed = this.maxspeed;
+  ////if(d < 100)
+  ////{
+  ////  speed = map(d, 0, 100, 0, this.maxspeed);
+  ////}
+  //desired.setMag(speed);
+  //var steer = p5.Vector.sub(desired, this.vel);
+  //steer.limit(this.maxforce);
+  //return steer;
 }

@@ -5,6 +5,7 @@ var r = []
 var g = []
 var b = []
 var backGrndColor = 0;
+var arrived = true;
 
 function preload()
 {
@@ -32,29 +33,14 @@ function setup()
 {
   createCanvas(600, 300);
   background(backGrndColor);
-  //textFont(font);
-  //textSize(192);
-  //fill(255);
-  //noStroke();
-  //text('TRAIN', 70, 200);
   
   var points = font.textToPoints('Sun', 70, 200, 192);
-  //points = strokeWeight(2);
-  
   for (var i = 0; i < points.length; i++)
   {
     var pt = points[i];
-    var vehicle = new Vehicle(pt.x +10, pt.y +10);
+    var vehicle = new Vehicle(pt.x, pt.y);
     vehicles.push(vehicle);
-    //stroke(255);
-    //strokeWeight(8);
-    //point(pt.x, pt.y);
   }
-  //console.log(vehicles.length);
-  //for(var i = 0; i < 280; i++)
-  //{
-  //  console.log(randomSize[i]);
-  //}
 }
 
 function draw()
@@ -63,8 +49,19 @@ function draw()
   for (var i = 0; i < vehicles.length; i++)
   {
     var v = vehicles[i];
+    
     v.behaviors();
     v.update();
     v.show(randomSize[i], r[i], g[i], b[i]);
   }
+  
+  stroke(255, 212, 40);
+  strokeWeight(2);
+  noFill();
+  ellipse(mouseX,mouseY,50,50);
+}
+
+function whatever()
+{
+
 }
